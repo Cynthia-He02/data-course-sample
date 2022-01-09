@@ -1,39 +1,59 @@
-# Week1推薦系統-Ruled-based recommendation<br>
+# Week3推薦系統-Collaborative filtering recommendation<br>
 ### 目的<br>
-本周課程實作Ruled-based推薦系統，目的在於透過找尋資料中已購商品的銷售狀況做為規則，<br>
-去推薦其他購買者商品。並透過計算推薦商品與消費者實際購買商品狀況，評估推薦成果。<br>
+本周課程實作Collaborative filtering推薦系統，基於使用者及商品間的關係，以推薦使用者所在的群組中熱門的項目(User-based)或推薦被同一群使用者共同喜歡的商品(Item-based)。<br>
 <br>
-### 實作發現-Ruled-based系統優缺點<br>
-在實作過程中發現，以Ruled-based為出發點，優點是透過不同規則的發現，能找到新的推薦結果，<br>
-缺點則是規則的發現並不容易、且較缺乏對個別消費者個人化的推薦。<br>
+### 實作發現-Collaborative filtering系統優缺點<br>
+在實作過程中發現，以Collaborative filtering為出發點，優點是增加推薦多樣性，不限於使用者喜歡類型的商品<br>
+缺點則是當重複購買的使用者不多時，效果不顯著。<br>
 <br>
 ### 使用資料集&欄位<br>
-資料集：http://deepyeti.ucsd.edu/jianmo/amazon/categoryFilesSmall/All_Beauty.csv<br>
-使用欄位：asin(商品ID)、reviewerID(評論者ID)、overall(商品評分)、unixReviewTime(評分時間)<br>
-資料集時間：訓練資料：2000-01-10 - 2018-09-01/測試資料：2018-09-01 - 2018-09-30<br>
+--資料集--<br>
+http://deepyeti.ucsd.edu/jianmo/amazon/categoryFilesSmall/All_Beauty.csv<br>
+http://deepyeti.ucsd.edu/jianmo/amazon/metaFiles2/meta_All_Beauty.json.gz<br>
+<br>
+--使用欄位--<br>
+Rating: asin(商品ID)、reviewerID(評論者ID)、overall(商品評分)、unixReviewTime(評分時間)<br>
+metadata: title(商品名稱)、brand(品牌)、rank(商品排名)、price(商品價格)、asin(商品ID)<br>
+<br>
+--資料集時間--<br>
+訓練資料：2000-01-10 - 2018-09-01<br>
+測試資料：2018-09-01 - 2018-09-30<br>
+<br>
 <br>
 ### 推薦邏輯<br>
-此次推薦會以商品評分、商品銷售數量、商品銷售時間做為推薦依據<br>
+step1: 計算不同使用者/商品間的相似度，去推薦同樣喜歡<br>
+step2: 偕同過濾無法規件的商品，以規則推薦補足<br>
 <br>
 ### 實作過程<br>
-#### 資料整理及切分<br>
-1.將時間戳記欄位轉換成年月日，較易理解及計算<br>
+#### 資料整理及EDA<br>
+---Ratings---<br>
+1.調整日期欄位、去除重複資料
 2.切分資料集<br>
-3.新增欄位計算商品銷售數量<br>
-4.將評價數取中位數<br>
-5.取各商品最近期銷售時間<br>
+3.觀察使用者評分狀態<br>
+4.觀察評分(overall)欄位狀況<br>
+
+#### 推薦方式-比較不同偕同過濾搭配規則推薦方式<br>
+part1: cf-user-based (recommender1)<br>
+結合user-based偕同過濾及規則推薦)<br>
+結合user-based偕同過濾及規則推薦<br>
 <br>
-#### 推薦<br>
-此次推薦採有條件的隨機抽樣<br>
-經過不同參數調整測試，以下列方式進行推薦：<br>
-商品銷售數量大於4000筆(取較熱門的商品)<br>
-日期晚於2018-01-01(取較近期銷售)<br>
-評分中位數大於４分（評價較好之商品）<br>
+part2:cf-item-based (recommender2) <br>
+結合item-based偕同過濾及規則推薦<br>
+延續前兩周發現之結果，規則推薦採近期高分熱銷品推薦<br>
+<br>
+part3:using_surprise (recommender3) <br>
+using_surprise (recommender3)<br>
+延續前兩周發現之結果，規則推薦採近期高分熱銷品推薦<br>
 <br>
 #### 推薦結果評分<br>
-最終推薦準確率為6.78%<br>
+part1: 比較不同商品特徵值結果<br>
+| method   |  Description      | score |
+|----------|:-----------------:|------:|
+|     1    |    cf_user+rule   |0.15762|
+|     2    |    cf_item+rule   |0.15593|
+|     3    |  cf_surprise+rule |0.15762|
 <br>
-### 結果發現
-在測試過程中發現，要提高推薦成功率可以選擇銷售日期較近的商品<br>
-及銷售數量偏高者，推測近期熱銷商品為大眾較喜愛之商品、就算少了個人化推薦因素<br>
-成功率也較高。
+### 結果發現<br>
+三種偕同過濾的結果分數相差不大<br>
+因為資料集舊客較少，除了Collaborative filtering推薦，若搭配rule-based能提高準確率<br>
+
