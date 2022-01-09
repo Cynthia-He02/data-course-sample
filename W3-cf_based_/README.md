@@ -33,16 +33,16 @@ step2: 偕同過濾無法規件的商品，以規則推薦補足<br>
 4.觀察評分(overall)欄位狀況<br>
 
 #### 推薦方式-比較不同偕同過濾搭配規則推薦方式<br>
-part1: cf-user-based (recommender1)<br>
-結合user-based偕同過濾及規則推薦)<br>
-結合user-based偕同過濾及規則推薦<br>
+◆ part1: cf-user-based (recommender1)<br>
+結合user-based偕同過濾及規則推薦◆<br>
+延續前兩周發現之結果，規則推薦採近期高分熱銷品推薦<br>
 <br>
-part2:cf-item-based (recommender2) <br>
+◆ part2:cf-item-based (recommender2) <br>
 結合item-based偕同過濾及規則推薦<br>
 延續前兩周發現之結果，規則推薦採近期高分熱銷品推薦<br>
 <br>
-part3:using_surprise (recommender3) <br>
-using_surprise (recommender3)<br>
+◆ part3:using_surprise (recommender3) <br>
+結合surprise模型偕同過濾及規則推薦<br>
 延續前兩周發現之結果，規則推薦採近期高分熱銷品推薦<br>
 <br>
 #### 推薦結果評分<br>
